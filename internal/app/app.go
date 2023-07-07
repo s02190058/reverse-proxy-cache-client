@@ -16,8 +16,7 @@ import (
 )
 
 const (
-	prompt = "> "
-	perm   = 0644
+	perm = 0644
 )
 
 var (
@@ -27,6 +26,7 @@ var (
 
 // App is an engine.
 type App struct {
+	prompt     string
 	dir        string
 	async      bool
 	l          *slog.Logger
@@ -47,11 +47,12 @@ func New(host, port string, dir string, async bool) (*App, error) {
 	}
 
 	return &App{
+		prompt:     fmt.Sprintf("%s:%s> ", host, port),
 		dir:        dir,
 		async:      async,
 		l:          l,
 		grpcClient: grpcClient,
-		re:         regexp.MustCompile(`^https?://www\.youtube\.com/watch\?v=[a-zA-Z0-9_-]{11}`),
+		re:         regexp.MustCompile(`^(https?://)?www\.youtube\.com/watch\?v=[a-zA-Z0-9_-]{11}`),
 		closeFunc: func() {
 			if err = closeFunc(); err != nil {
 				l.Error("can't close conn", slogErr(err))
@@ -65,7 +66,7 @@ func (a *App) Run() {
 	defer a.closeFunc()
 
 	scanner := bufio.NewScanner(os.Stdout)
-	fmt.Print(prompt)
+	fmt.Print(a.prompt)
 	for scanner.Scan() {
 		videoURL := scanner.Text()
 
@@ -84,7 +85,7 @@ func (a *App) Run() {
 			}
 		}
 
-		fmt.Print(prompt)
+		fmt.Print(a.prompt)
 	}
 	if err := scanner.Err(); err != nil {
 		a.l.Error("Scanner.Err", slog.String("error", err.Error()))
@@ -109,7 +110,7 @@ func (a *App) handle(videoURL string) error {
 		return err
 	}
 
-	filename := fmt.Sprintf("%s.jpg", videoID)
+	filename := videoID + ".jpg"
 	path := filepath.Join(a.dir, filename)
 	if err = os.WriteFile(path, resp.Image, perm); err != nil {
 		return err
