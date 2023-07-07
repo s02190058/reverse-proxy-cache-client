@@ -1,6 +1,6 @@
 # Reverse Proxy Cache Client
 
-простой клиент для [прокси-сервиса](https://github.com/s02190058/reverse-proxy-cache).
+Простой клиент для [прокси-сервиса](https://github.com/s02190058/reverse-proxy-cache).
 
 ## Быстрый старт
 
