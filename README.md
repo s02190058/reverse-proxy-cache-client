@@ -4,10 +4,10 @@
 
 ## Быстрый старт
 
-Устанавливает утилиту `rvc-cli` в директорию `$GOPATH/bin`:
+Устанавливает утилиту `rpc-cli` в директорию `$GOPATH/bin`:
 
 ```shell
-go install github.com/s02190058/reverse-proxy-cache-client/cmd/rvc-cli
+go install github.com/s02190058/reverse-proxy-cache-client/cmd/rpc-cli@latest
 ```
 
 ## Опции

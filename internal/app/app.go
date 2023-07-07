@@ -35,7 +35,7 @@ type App struct {
 	closeFunc  func()
 }
 
-// New creates an rvc-cli instance.
+// New creates an rpc-cli instance.
 func New(host, port string, dir string, async bool) (*App, error) {
 	l := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
 		Level: slog.LevelInfo,
